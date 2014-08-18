@@ -6,7 +6,7 @@ Modification to Honeybadger gem that allows notifying multiple honeybadger proje
 
 Add this line to your application's Gemfile:
 
-    gem 'honeybadger-ruby-splitproject'
+    gem 'honeybadger-ruby-splitproject', :github =>'ThinkNear/honeybadger-ruby-splitproject'
 
 And then execute:
 
@@ -22,14 +22,14 @@ By default, all errors go to normal Honeybadger account. If no environment key i
 
 ### General
 1. Add to initializers: 
-<code> Honeybadger::Splitproject.add_notifiers_for_team("<team name>")</code>
-2. Add environment variable with key "HONEYBADGER_API_KEY_<TEAM>"
+<code> Honeybadger::Splitproject.add_notifiers_for_team("[team name]")</code>
+2. Add environment variable with key "HONEYBADGER_API_KEY_[TEAM NAME]"
   * "TEAM" must be uppercase with no spaces.
-  * e.g. If <team name> = "big team", the environment key name = "HONEYBADGER_API_KEY_BIGTEAM"
+  * e.g. If [team name] = "big team", the environment key name = "HONEYBADGER_API_KEY_BIGTEAM"
 3. The following methods will be available
   * Honeybadger.notify_detailed(class_name, error_message, options)
-  * Honeybadger.notify_<team name>, where team name is lowercase with no spaces (e.g. Honeybadger.notify_bigteam)
-  * Honeybadger.notify_detailed_<team_name>(class_name, error_message, options) (e.g. Honeybadger.notify_detailed_bigteam)
+  * Honeybadger.notify_[team name], where team name is lowercase with no spaces (e.g. Honeybadger.notify_bigteam)
+  * Honeybadger.notify_detailed_[team_name](class_name, error_message, options) (e.g. Honeybadger.notify_detailed_bigteam)
   
 ### Sidekiq
 1. Add alert_team option to sidekiq options, to alert specific team.
