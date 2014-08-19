@@ -21,8 +21,9 @@ Or install it yourself as:
 By default, all errors go to normal Honeybadger account. If no environment key is specified, it will not add any extra methods
 
 ### General
-1. Add to initializers: 
-<code> Honeybadger::Splitproject.add_notifiers_for_team("[team name]")</code>
+1. Add to initializers:
+* <code> require 'honeybadger/splitproject' </code>
+* <code> Honeybadger::Splitproject.add_notifiers_for_team("[team name]")</code>
 2. Add environment variable with key "HONEYBADGER_API_KEY_[TEAM NAME]"
   * "TEAM" must be uppercase with no spaces.
   * e.g. If [team name] = "big team", the environment key name = "HONEYBADGER_API_KEY_BIGTEAM"
