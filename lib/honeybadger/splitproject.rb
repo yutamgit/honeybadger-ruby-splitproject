@@ -24,14 +24,13 @@ module Honeybadger
       def add_team_specific_notifier(team_postfix, api_key)
         if api_key.nil? || api_key.length == 0
           Honeybadger.instance_eval do
-            define_singleton_method("notify_#{team_postfix}") do |exception, options|
+            define_singleton_method("notify_#{team_postfix}") do |exception, options = {}|
               notify(exception, options)
             end
           end
         else
           Honeybadger.instance_eval do
-            define_singleton_method("notify_#{team_postfix}") do |exception, options|
-              options ||= {}  # this is how you specify default params in this way
+            define_singleton_method("notify_#{team_postfix}") do |exception, options = {}|
               notify(exception, options.merge({ api_key: api_key }))
             end
           end
@@ -41,8 +40,7 @@ module Honeybadger
       # this will add a notify_detailed_<teamname> method.
       def add_team_specific_detailed_notifier(team_postfix)
         Honeybadger.instance_eval do
-          define_singleton_method("notify_detailed_#{team_postfix}") do |error_class, error_message, parameters|
-            parameters ||= {} # this is how you specify default params in this way
+          define_singleton_method("notify_detailed_#{team_postfix}") do |error_class, error_message, parameters = {}|
             options = parameters.merge({ error_message: error_message })
             send("notify_#{team_postfix}", { error_class: error_class }, options)
           end

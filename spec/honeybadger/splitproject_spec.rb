@@ -31,32 +31,52 @@ describe Honeybadger::Splitproject do
           ENV.delete('HONEYBADGER_API_KEY_TEAM1')
         end
         
-        it "should add a notify method to honeybadger module named after team" do
-          Honeybadger::Splitproject.add_notifiers_for_team("team1")
-          
-          expect(Honeybadger).to respond_to(:notify_team1)
-        end
-        it "should add a notify method that delegates to the original notify method" do
-          Honeybadger::Splitproject.add_notifiers_for_team("team1")
-          @options = { :key => "1" }
-          
-          expect(Honeybadger).to receive(:notify).with("exception", @options.merge(api_key: "api_key")).once
-          
-          Honeybadger.notify_team1("exception", @options)
-        end
-        it "should add a notify detailed method to honeybadger module named after team" do
-          Honeybadger::Splitproject.add_notifiers_for_team("team1")
-          
-          expect(Honeybadger).to respond_to(:notify_detailed_team1)
-        end
-        it "should add a notify detailed method that delegates to the original notify detailed method" do
-          Honeybadger::Splitproject.add_notifiers_for_team("team1")
-          params = { :param1 => "1" }
-          expected_params = params.merge(error_message: "error_message", api_key: "api_key")
+        describe "#notify" do
+          it "should add a notify method to honeybadger module named after team" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
 
-          expect(Honeybadger).to receive(:notify).with({ :error_class => "error_class" }, expected_params).once
+            expect(Honeybadger).to respond_to(:notify_team1)
+          end
+          it "should add a notify method that delegates to the original notify method" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+            @options = { :key => "1" }
 
-          Honeybadger.notify_detailed_team1("error_class", "error_message", params)
+            expect(Honeybadger).to receive(:notify).with("exception", @options.merge(api_key: "api_key")).once
+
+            Honeybadger.notify_team1("exception", @options)
+          end
+          it "should default the options hash if none is passed in, for the notify method" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+
+            expect(Honeybadger).to receive(:notify).with("exception", { api_key: "api_key" }).once
+
+            Honeybadger.notify_team1("exception")
+          end
+        end
+        
+        describe "#notify_detailed" do
+          it "should add a notify detailed method to honeybadger module named after team" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+
+            expect(Honeybadger).to respond_to(:notify_detailed_team1)
+          end
+          it "should add a notify detailed method that delegates to the original notify detailed method" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+            params = { :param1 => "1" }
+            expected_params = params.merge(error_message: "error_message", api_key: "api_key")
+
+            expect(Honeybadger).to receive(:notify).with({ :error_class => "error_class" }, expected_params).once
+
+            Honeybadger.notify_detailed_team1("error_class", "error_message", params)
+          end
+          it "should default the options hash if none is passed in for the notify detailed method" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+            expected_params = { error_message: "error_message", api_key: "api_key" }
+
+            expect(Honeybadger).to receive(:notify).with({ :error_class => "error_class" }, expected_params).once
+
+            Honeybadger.notify_detailed_team1("error_class", "error_message")
+          end
         end
       end
       
@@ -65,32 +85,52 @@ describe Honeybadger::Splitproject do
           ENV.delete('HONEYBADGER_API_KEY_TEAM1')
         end
         
-        it "should add a notify method to honeybadger module named after team" do
-          Honeybadger::Splitproject.add_notifiers_for_team("team1")
-          
-          expect(Honeybadger).to respond_to(:notify_team1)
-        end
-        it "should add a notify method that delegates to the original notify method without adding a api key" do
-          Honeybadger::Splitproject.add_notifiers_for_team("team1")
-          @options = { :key => "1" }
-          
-          expect(Honeybadger).to receive(:notify).with("exception", @options).once
-          
-          Honeybadger.notify_team1("exception", @options)
-        end
-        it "should add a notify detailed method to honeybadger module named after team" do
-          Honeybadger::Splitproject.add_notifiers_for_team("team1")
-          
-          expect(Honeybadger).to respond_to(:notify_detailed_team1)
-        end
-        it "should add a notify detailed method that delegates to the original notify detailed method" do
-          Honeybadger::Splitproject.add_notifiers_for_team("team1")
-          params = { :param1 => "1" }
-          expected_params = params.merge(error_message: "error_message")
+        describe "#notify" do
+          it "should add a notify method to honeybadger module named after team" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
 
-          expect(Honeybadger).to receive(:notify).with({ :error_class => "error_class" }, expected_params).once
+            expect(Honeybadger).to respond_to(:notify_team1)
+          end
+          it "should add a notify method that delegates to the original notify method without adding a api key" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+            @options = { :key => "1" }
 
-          Honeybadger.notify_detailed_team1("error_class", "error_message", params)
+            expect(Honeybadger).to receive(:notify).with("exception", @options).once
+
+            Honeybadger.notify_team1("exception", @options)
+          end
+          it "should default the options hash if none is passed in, for the notify method" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+
+            expect(Honeybadger).to receive(:notify).with("exception", {}).once
+
+            Honeybadger.notify_team1("exception")
+          end
+        end
+        
+        describe "#notify_detailed" do
+          it "should add a notify detailed method to honeybadger module named after team" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+
+            expect(Honeybadger).to respond_to(:notify_detailed_team1)
+          end
+          it "should add a notify detailed method that delegates to the original notify detailed method" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+            params = { :param1 => "1" }
+            expected_params = params.merge(error_message: "error_message")
+
+            expect(Honeybadger).to receive(:notify).with({ :error_class => "error_class" }, expected_params).once
+
+            Honeybadger.notify_detailed_team1("error_class", "error_message", params)
+          end
+          it "should default the options hash if none is passed in for the notify detailed method" do
+            Honeybadger::Splitproject.add_notifiers_for_team("team1")
+            expected_params = { error_message: "error_message" }
+
+            expect(Honeybadger).to receive(:notify).with({ :error_class => "error_class" }, expected_params).once
+
+            Honeybadger.notify_detailed_team1("error_class", "error_message")
+          end
         end
       end
     end
