@@ -11,12 +11,6 @@ module Honeybadger
         env_key = KeyHelpers.env_key(team_postfix)
         api_key = ENV[env_key]
         
-        # if no environment variable is present, just exit
-        if api_key.nil? || api_key.strip.length == 0
-          Rails.logger.info "No override for Honeybadger team #{team_postfix} because missing env variable #{env_key}."
-          return
-        end
-        
         raise "Team #{team_postfix} already setup with honeybadger" if Honeybadger.respond_to?("notify_#{team_postfix}")
         
         team_postfix = team_postfix.delete(' ').downcase
@@ -28,10 +22,18 @@ module Honeybadger
       private
       # this will add a notify_<teamname> method.
       def add_team_specific_notifier(team_postfix, api_key)
-        Honeybadger.instance_eval do
-          define_singleton_method("notify_#{team_postfix}") do |exception, options|
-            options ||= {}  # this is how you specify default params in this way
-            notify(exception, options.merge({ api_key: api_key }))
+        if api_key.nil? || api_key.length == 0
+          Honeybadger.instance_eval do
+            define_singleton_method("notify_#{team_postfix}") do |exception, options|
+              notify(exception, options)
+            end
+          end
+        else
+          Honeybadger.instance_eval do
+            define_singleton_method("notify_#{team_postfix}") do |exception, options|
+              options ||= {}  # this is how you specify default params in this way
+              notify(exception, options.merge({ api_key: api_key }))
+            end
           end
         end
       end
