@@ -27,10 +27,11 @@ By default, all errors go to normal Honeybadger account. If no environment key i
 2. Add environment variable with key "HONEYBADGER_API_KEY_[TEAM NAME]"
   * "TEAM" must be uppercase with no spaces.
   * e.g. If [team name] = "big team", the environment key name = "HONEYBADGER_API_KEY_BIGTEAM"
-3. The following methods will be available
-  * Honeybadger.notify_detailed(class_name, error_message, options)
-  * Honeybadger.notify_[team name], where team name is lowercase with no spaces (e.g. Honeybadger.notify_bigteam)
-  * Honeybadger.notify_detailed_[team_name](class_name, error_message, options) (e.g. Honeybadger.notify_detailed_bigteam)
+  * On Heroku: <code>heroku config:add HONEYBADGER_API_KEY_BIGTEAM="[Honeybadger key]"</code>
+3. The following extra methods will be available (for team "big team")
+  * <code>Honeybadger.notify_detailed(class_name, error_message, options)</code> - new method for "default Honeybadger account"
+  * <code>Honeybadger.notify_bigteam</code> - delegates to Honeybadger.notify with different API key
+  * <code>Honeybadger.notify_detailed_bigteam(class_name, error_message, options) </code>
   
 ### Sidekiq
 1. Add alert_team option to sidekiq options, to alert specific team.
