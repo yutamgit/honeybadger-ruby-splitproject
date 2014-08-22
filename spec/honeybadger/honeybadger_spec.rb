@@ -1,6 +1,9 @@
 require 'spec_helper'
 require 'honeybadger/honeybadger'
 
+class Dummy
+end
+
 describe Honeybadger do
   
   describe "#notify_detailed" do
@@ -8,6 +11,12 @@ describe Honeybadger do
       expect(Honeybadger).to receive(:notify)
         .with(error_class: "error_class", error_message: "error_message", parameters: { :key => "val" }).once
       Honeybadger.notify_detailed("error_class", "error_message", { :key => "val" })
+    end
+    
+    it "should to string the error class to prevent stack overflow in HB" do
+      expect(Honeybadger).to receive(:notify)
+        .with(error_class: "Class", error_message: "error_message", parameters: { :key => "val" }).once
+      Honeybadger.notify_detailed(Dummy.class, "error_message", { :key => "val" })
     end
   end
   

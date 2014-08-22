@@ -41,8 +41,7 @@ module Honeybadger
       def add_team_specific_detailed_notifier(team_postfix)
         Honeybadger.instance_eval do
           define_singleton_method("notify_detailed_#{team_postfix}") do |error_class, error_message, parameters = {}|
-            options = parameters.merge({ error_message: error_message })
-            send("notify_#{team_postfix}", { error_class: error_class }, options)
+            send("notify_#{team_postfix}", error_class: error_class, error_message: error_message, parameters: parameters)
           end
         end
       end

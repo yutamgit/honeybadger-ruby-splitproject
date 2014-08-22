@@ -4,7 +4,8 @@ require 'honeybadger/key_helpers'
 module Honeybadger
   class << self
     def notify_detailed(error_class, error_message, parameters = {})
-      notify(error_class: error_class, error_message: error_message, parameters: parameters)
+      # force class to be to string'd to prevent HB stackoverflow
+      notify(error_class: error_class.to_s, error_message: error_message, parameters: parameters)
     end
     
     # detection of :alert_team option in errors from sidekiq workers
